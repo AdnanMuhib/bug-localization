@@ -4,7 +4,7 @@
     pip install xmltodict javalang pygments inflection nltk numpy scipy scikit-learn spacy
     ```
     Also, download and install the GloVe word vectors [`en_vectors_web_lg`](https://spacy.io/models/en#en_vectors_web_lg) for spaCy and [NLTK data](http://www.nltk.org/data.html).
-    To Download and install model manually use 'download_GloVe_word_vectors.sh' and 'install_GloVe_word_vectors.sh'.
+    To Download and install model manually use `download_GloVe_word_vectors.sh` and `install_GloVe_word_vectors.sh`.
 
 2. Clone this repository:
     ```
