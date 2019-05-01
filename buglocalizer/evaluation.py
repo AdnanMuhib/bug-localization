@@ -27,8 +27,6 @@ def cost(coeffs, src_files, bug_reports, *rank_scores):
     mean_avgp = []
     # print(bug_reports)
     for i, report in enumerate(bug_reports.items()):
-        with open("report/" + str(i) + ".txt",'w') as file:
-            file.write(str(report[1].description))
         # Finding source files from the simis indices
         src_ranks, _ = zip(*sorted(zip(src_files.keys(), final_scores[i]),
                                    key=operator.itemgetter(1), reverse=True))
