@@ -70,8 +70,8 @@ def multilabel_clf(train_set, test_set, src_keys):
 
 def prepare_clf(bug_reports):
     """Preparing train set and test set based on previously fixed bugs"""
-
-    with open(DATASET.root / 'preprocessed_src.pickle', 'rb') as file:
+    fname = str(DATASET.root) + 'preprocessed_src.pickle'
+    with open(fname, 'rb') as file:
         src_files = pickle.load(file)
     
     bug_reports = list(bug_reports.values())
@@ -94,13 +94,14 @@ def prepare_clf(bug_reports):
 
 
 def main():
-    
-    with open(DATASET.root / 'preprocessed_reports.pickle', 'rb') as file:
+    fname = str(DATASET.root) + 'preprocessed_reports.pickle'
+    with open(fname, 'rb') as file:
         bug_reports = pickle.load(file)
 
     probabilities = prepare_clf(bug_reports)
     
-    with open(DATASET.root / 'fixed_bug_reports.json', 'w') as file:
+    fname = str(DATASET.root) + 'fixed_bug_reports.json'
+    with open(fname, 'w') as file:
         json.dump(probabilities, file)
 
 

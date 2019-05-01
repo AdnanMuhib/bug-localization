@@ -20,31 +20,37 @@ def combine_rank_scores(coeffs, *rank_scores):
 
 def cost(coeffs, src_files, bug_reports, *rank_scores):
     """The cost function to be minimized"""
-    
+    # print("[INFO].. Calculating Cost")
     final_scores = combine_rank_scores(coeffs, *rank_scores)
     
     mrr = []
     mean_avgp = []
-    
+    # print(bug_reports)
     for i, report in enumerate(bug_reports.items()):
-        
+        with open("report/" + str(i) + ".txt",'w') as file:
+            file.write(str(report[1].description))
         # Finding source files from the simis indices
         src_ranks, _ = zip(*sorted(zip(src_files.keys(), final_scores[i]),
                                    key=operator.itemgetter(1), reverse=True))
-        
         # Getting reported fixed files
+
         fixed_files = report[1].fixed_files
-        
+        # print(src_ranks.index(fixed_files[0]) + 1)
         # Getting the ranks of reported fixed files
-        relevant_ranks = sorted(src_ranks.index(fixed) + 1
-                                for fixed in fixed_files)
-        # MRR
-        min_rank = relevant_ranks[0]
-        mrr.append(1 / min_rank)
-        
-        # MAP
-        mean_avgp.append(np.mean([len(relevant_ranks[:j + 1]) / rank
-                                   for j, rank in enumerate(relevant_ranks)]))
+        try:
+            relevant_ranks = sorted(src_ranks.index(fixed) + 1
+                                    for fixed in fixed_files)
+            # print(relevant_ranks)
+            # MRR
+            min_rank = relevant_ranks[0]
+            mrr.append(1 / min_rank)
+            
+            # MAP
+            mean_avgp.append(np.mean([len(relevant_ranks[:j + 1]) / rank
+                                       for j, rank in enumerate(relevant_ranks)]))
+        except Exception as e:
+            # raise e
+            continue
     
     return -1 * (np.mean(mrr) + np.mean(mean_avgp))
 
@@ -62,7 +68,7 @@ def estiamte_params(src_files, bug_reports, *rank_scores):
     
 
 def evaluate(src_files, bug_reports, coeffs, *rank_scores):
-    
+    # print("[INFO].. Evaluat")
     final_scores = combine_rank_scores(coeffs, *rank_scores)
     
     # Writer for the output file
@@ -107,17 +113,21 @@ def evaluate(src_files, bug_reports, coeffs, *rank_scores):
                                          / (precision_at_n[k][i] + recall_at_n[k][i]))
         
         # Getting the ranks of reported fixed files
-        relevant_ranks = sorted(src_ranks.index(fixed) + 1
-                                for fixed in fixed_files)
-        # MRR
-        min_rank = relevant_ranks[0]
-        mrr.append(1 / min_rank)
-        
-        # MAP
-        mean_avgp.append(np.mean([len(relevant_ranks[:j + 1]) / rank
-                                   for j, rank in enumerate(relevant_ranks)]))
-        
-        result_file.write(bug_id + ',' + ','.join(src_ranks) + '\n')
+        try:
+            relevant_ranks = sorted(src_ranks.index(fixed) + 1
+                                    for fixed in fixed_files)
+            # MRR
+            min_rank = relevant_ranks[0]
+            mrr.append(1 / min_rank)
+            
+            # MAP
+            mean_avgp.append(np.mean([len(relevant_ranks[:j + 1]) / rank
+                                       for j, rank in enumerate(relevant_ranks)]))
+            
+            result_file.write(bug_id + ',' + ','.join(src_ranks) + '\n')
+        except Exception as e:
+            # raise e
+            continue
         
     result_file.close()
     
@@ -128,20 +138,21 @@ def evaluate(src_files, bug_reports, coeffs, *rank_scores):
 
 
 def main():
-    with open(DATASET.root / 'preprocessed_src.pickle', 'rb') as file:
+
+    with open(str(DATASET.root) +  'preprocessed_src.pickle', 'rb') as file:
         src_files = pickle.load(file)
-    with open(DATASET.root / 'preprocessed_reports.pickle', 'rb') as file:
+    with open(str(DATASET.root) +  'preprocessed_reports.pickle', 'rb') as file:
         bug_reports = pickle.load(file)
     
-    with open(DATASET.root / 'token_matching.json', 'r') as file:
+    with open(str(DATASET.root) +  'token_matching.json', 'r') as file:
         token_matching_score = json.load(file)  
-    with open(DATASET.root / 'vsm_similarity.json', 'r') as file:
+    with open(str(DATASET.root) +  'vsm_similarity.json', 'r') as file:
         vsm_similarity_score = json.load(file)
-    with open(DATASET.root / 'stack_trace.json', 'r') as file:
+    with open(str(DATASET.root) +  'stack_trace.json', 'r') as file:
         stack_trace_score = json.load(file)
-    with open(DATASET.root / 'semantic_similarity.json', 'r') as file:
+    with open(str(DATASET.root) +  'semantic_similarity.json', 'r') as file:
         semantic_similarity_score = json.load(file)
-    with open(DATASET.root / 'fixed_bug_reports.json', 'r') as file:
+    with open(str(DATASET.root) +  'fixed_bug_reports.json', 'r') as file:
         fixed_bug_reports_score = json.load(file)
     
     params = estiamte_params(src_files, bug_reports,

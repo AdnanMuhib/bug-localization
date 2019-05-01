@@ -2,7 +2,7 @@ from collections import namedtuple
 from pathlib import Path
 
 # Dataset root directory
-_DATASET_ROOT = Path('../data')
+_DATASET_ROOT = Path('G:/Locus/')
 
 Dataset = namedtuple('Dataset', ['name', 'root', 'src', 'bug_repo'])
 
@@ -23,9 +23,9 @@ swt = Dataset(
 
 zxing = Dataset(
     'zxing',
-    _DATASET_ROOT / 'ZXing',
-    _DATASET_ROOT / 'ZXing/ZXing-1.6',
-    _DATASET_ROOT / 'ZXing/ZXingBugRepository.xml'
+    _DATASET_ROOT / 'ZXing/',
+    _DATASET_ROOT / 'ZXing/gitrepo',
+    _DATASET_ROOT / 'ZXing/bugrepo/repository.xml'
 )
 
 ### Current dataset in use. (change this name to change the dataset)

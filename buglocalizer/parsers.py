@@ -59,7 +59,7 @@ class Parser:
         """Parse XML format bug reports"""
         
         # Convert XML bug repository to a dictionary
-        with open(self.bug_repo) as xml_file:
+        with open(str(self.bug_repo)) as xml_file:
             xml_dict = xmltodict.parse(xml_file.read(), force_list={'file':True})
             
         # Iterate through bug reports and build their objects
@@ -90,7 +90,7 @@ class Parser:
         
         # Looping to parse each source file
         for src_file in src_addresses:
-            with open(src_file) as file:
+            with open(src_file, encoding="utf8") as file:
                 src = file.read()
                     
             # Placeholder for different parts of a source file

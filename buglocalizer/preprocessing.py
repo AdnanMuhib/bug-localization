@@ -63,9 +63,9 @@ class ReportPreprocessing:
     
         # Copy tokens
         returning_tokens = tokens[:]
-        
+        print(tokens)
         for token in tokens:
-            split_tokens = re.split(fr'[{string.punctuation}]+', token)
+            split_tokens = re.split('[{string.punctuation}]+', token)
             
             # If token is split into some other tokens
             if len(split_tokens) > 1:
@@ -216,7 +216,7 @@ class SrcPreprocessing:
         returning_tokens = tokens[:]
         
         for token in tokens:
-            split_tokens = re.split(fr'[{string.punctuation}]+', token)
+            split_tokens = re.split('[{string.punctuation}]+', token)
             
             # If token is split into some other tokens
             if len(split_tokens) > 1:
@@ -389,13 +389,18 @@ def main():
     
     src_prep = SrcPreprocessing(parser.src_parser())
     src_prep.preprocess()
-    with open(DATASET.root / 'preprocessed_src.pickle', 'wb') as file:
-        pickle.dump(src_prep.src_files, file, protocol=pickle.HIGHEST_PROTOCOL)
+    fname = str(DATASET.root) + "preprocessed_src.pickle"
+    
+    file = open(fname, 'wb')
+    # with open(DATASET.root / 'preprocessed_src.pickle', 'wb') as file:
+    pickle.dump(src_prep.src_files, file, protocol=pickle.HIGHEST_PROTOCOL)
     
     report_prep = ReportPreprocessing(parser.report_parser())
     report_prep.preprocess()
-    with open(DATASET.root / 'preprocessed_reports.pickle', 'wb') as file:
-        pickle.dump(report_prep.bug_reports, file, protocol=pickle.HIGHEST_PROTOCOL)
+    fname = str(DATASET.root) + 'preprocessed_reports.pickle' 
+    file1 = open(fname, 'wb') 
+    # with open(DATASET.root / 'preprocessed_reports.pickle', 'wb') as file:
+    pickle.dump(report_prep.bug_reports, file1, protocol=pickle.HIGHEST_PROTOCOL)
 
     
 if __name__ == '__main__':

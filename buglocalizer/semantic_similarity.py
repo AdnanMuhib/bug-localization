@@ -42,15 +42,18 @@ def calculate_similarity(src_files, bug_reports):
     
     
 def main():
-    
-    with open(DATASET.root / 'preprocessed_src.pickle', 'rb') as file:
+    fname = str(DATASET.root) + 'preprocessed_src.pickle'
+    # with open(DATASET.root / 'preprocessed_src.pickle', 'rb') as file:
+    with open(fname, 'rb') as file:
         src_files = pickle.load(file)
-    with open(DATASET.root / 'preprocessed_reports.pickle', 'rb') as file:
+    fname = str(DATASET.root) + 'preprocessed_reports.pickle'
+    with open(fname, 'rb') as file:
         bug_reports = pickle.load(file)
         
     all_simis = calculate_similarity(src_files, bug_reports)
-
-    with open(DATASET.root / 'semantic_similarity.json', 'w') as file:
+    fname = str(DATASET.root) + 'semantic_similarity.json'
+    # with open(DATASET.root / 'semantic_similarity.json', 'w') as file:
+    with open(fname, 'w') as file:
         json.dump(all_simis, file)
 
 
